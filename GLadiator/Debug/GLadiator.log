@@ -1,3 +1,0 @@
-﻿Main.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
-Main.obj : error LNK2001: unresolved external symbol __imp__glewExperimental
-E:\GLadiator\GLadiator\Debug\GLadiator.exe : fatal error LNK1120: 2 unresolved externals
