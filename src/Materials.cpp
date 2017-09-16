@@ -18,14 +18,14 @@ bool Materials::loadTexture(std::string texturePath) {
 	glGenTextures(1, &textureID);
 
 	std::unique_ptr<unsigned char> imageData;
-	
+
 	stbi_set_flip_vertically_on_load(true);
 	imageData.reset(stbi_load(texturePath.c_str(), &width, &height, &comp, STBI_default));
 	
 	if (imageData.get() == nullptr)
 		return false;
 
-	GLenum components = comp == 3 ? GL_RGB : GL_RGBA;
+	GLenum components = comp == 3 ? GL_RGB : comp == 1? GL_RED : GL_RGBA;
 
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	

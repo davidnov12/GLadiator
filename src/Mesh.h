@@ -19,6 +19,11 @@
 #define DS_TEX 0x3		// Diffuse + Specular texture
 #define DN_TEX 0x5		// Diffuse + Normal texture
 #define DSN_TEX	0x7		// Diffuse + Specular + Normal texture
+#define R_TEX 0x8		// Roughness texure
+#define M_TEX 0x10		// Metalic texture
+#define A_TEX 0x20		// Ambient occlusion texture
+#define PBR_TEX 0x3d	// PBR textures (albedo + normal + roughness + metal + ambient occlusion)
+#define H_TEX 0x40		// Height map
 
 
 class Mesh {
@@ -28,13 +33,9 @@ public:
 	typedef struct {
 		glm::vec3 position;
 		glm::vec3 normal;
-		glm::vec2 uv;
-
-		#ifdef CALC_TB
 		glm::vec3 tangent;
 		glm::vec3 bitangent;
-		#endif
-
+		glm::vec2 uv;
 		GLuint materialID;
 	} Vertex;
 

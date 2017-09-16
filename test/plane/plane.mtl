@@ -1,0 +1,10 @@
+newmtl Material
+#map_Kd diffuseMapWall.jpg
+#map_bump normalMapWall.jpg
+
+map_Kd PBR/wall/harshbricks-albedo.png
+map_bump PBR/wall/harshbricks-normal.png
+map_Pr PBR/wall/harshbricks-roughness.png
+map_Pm PBR/wall/harshbricks-metalness.png
+map_Ka PBR/wall/harshbricks-ao.png
+disp PBR/wall/harshbricks-height.jpg

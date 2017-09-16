@@ -1,6 +1,6 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "Mesh.h"
-
+#include "glm/ext.hpp"
 
 Mesh::Mesh(std::string file, bool loadMaterials, Materials* texHandler, GLuint texMode) {
 
@@ -99,6 +99,16 @@ void Mesh::prepareBuffers() {
 
 bool Mesh::setupBuffers() {
 
+	/*for (int i = 0; i < vertices.size(); i++) {
+		std::cout << "VERTEX " << i << std::endl;
+		std::cout << "POS " << glm::to_string(vertices[i].position) << std::endl;
+		std::cout << "NORM " << glm::to_string(vertices[i].normal) << std::endl;
+		std::cout << "UV " << glm::to_string(vertices[i].uv) << std::endl;
+		std::cout << "TNG " << glm::to_string(vertices[i].tangent) << std::endl;
+		std::cout << "BTG " << glm::to_string(vertices[i].bitangent) << std::endl;
+		std::cout << "ID " << vertices[i].materialID << std::endl << std::endl;
+	}*/
+
 	glBindVertexArray(vao);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -111,7 +121,11 @@ bool Mesh::setupBuffers() {
 
 	//if (mode == VERTEX_CNT) {
 	
-		#ifdef CALC_TB
+	//	#ifdef CALC_TB
+
+
+
+		
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat) + sizeof(GLuint), (void*)0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat) + sizeof(GLuint), (void*)(3 * sizeof(GLfloat)));
@@ -127,7 +141,7 @@ bool Mesh::setupBuffers() {
 		glEnableVertexAttribArray(4);
 		glEnableVertexAttribArray(5);
 
-		#else
+	/*	#else
 		
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat) + sizeof(GLuint), (void*)0);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat) + sizeof(GLuint), (void*)(3 * sizeof(GLfloat)));
@@ -139,7 +153,7 @@ bool Mesh::setupBuffers() {
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
 
-		#endif
+		#endif*/
 	
 
 	/*
@@ -241,44 +255,91 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 				if (mode == NO_TEX)
 					continue;
 
+				// DIFFUSE
 				if (mode & D_TEX) {
-					//std::cout << "DIFF\n";
 					if (textures->loadTexture(mtlDir + materials.at(i).diffuse_texname)) {
-						m.diffuseTexture = texID;
-						texID += 1;
+						std::cout << "TEX d" << std::endl;
+						//m.diffuseTexture = texID;
+						//texID += 1;
 					}
 					else
 						textures->addEmptyTexture();
 				}
 
+				// SPECULAR
 				if (mode & S_TEX) {
-
-					//std::cout << "SPEC\n";
 					if (textures->loadTexture(mtlDir + materials.at(i).specular_texname)) {
-						m.specularTexture = texID;
-						texID += 1;
+						std::cout << "TEX s" << std::endl;
+						//m.specularTexture = texID;
+						//texID += 1;
 					}
 					else
 						textures->addEmptyTexture();
 				}
 				
+				// NORMAL/BUMP
 				if (mode & N_TEX) {
 					//std::cout << "NORM\n";
 					if(textures->loadTexture(mtlDir + materials.at(i).normal_texname)) {
-						m.normalMap = texID;
-						texID += 1;
+						//std::cout << "TEX" << std::endl;
+						//m.normalMap = texID;
+						//texID += 1;
 					}
 
 					else if (textures->loadTexture(mtlDir + materials.at(i).bump_texname)) {
-						m.normalMap = texID;
-						texID += 1;
+						std::cout << "TEX b" << std::endl;
+						//m.normalMap = texID;
+						//texID += 1;
 					}
 
 					else
 						textures->addEmptyTexture();
 				}
 
-		
+				// ROUGHNESS
+				if (mode & R_TEX) {
+					if (textures->loadTexture(mtlDir + materials.at(i).roughness_texname)) {
+						std::cout << "TEX r" << std::endl;
+						//m.diffuseTexture = texID;
+						//texID += 1;
+					}
+					else
+						textures->addEmptyTexture();
+				}
+
+				// METAL
+				if (mode & M_TEX) {
+					if (textures->loadTexture(mtlDir + materials.at(i).metallic_texname)) {
+						std::cout << "TEX m" << std::endl;
+						//m.diffuseTexture = texID;
+						//texID += 1;
+					}
+					else
+						textures->addEmptyTexture();
+				}
+
+				// AMBIENT OCCLUSION
+				if (mode & A_TEX) {
+					if (textures->loadTexture(mtlDir + materials.at(i).ambient_texname)) {
+						std::cout << "TEX a" << std::endl;
+						//m.diffuseTexture = texID;
+						//texID += 1;
+					}
+					else
+						textures->addEmptyTexture();
+				}
+
+				// HEIGHT
+				if (mode & H_TEX) {
+					if (textures->loadTexture(mtlDir + materials.at(i).displacement_texname)) {
+						std::cout << "TEX h" << std::endl;
+						//m.diffuseTexture = texID;
+						//texID += 1;
+					}
+					else
+						textures->addEmptyTexture();
+				}
+
 			shapesMaterials.push_back(m);
 
 		}
@@ -302,6 +363,9 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 					tmp.materialID = mats.at(materials.at(shapes.at(shape).mesh.material_ids.at(0)).name);
 				else
 					tmp.materialID = 0;
+
+				tmp.tangent = glm::vec3(1, 0, 0);
+				tmp.bitangent = glm::vec3(0, 1, 0);
 
 				if (attr.vertices.size() > 0) {
 					tmp.position.x = attr.vertices.at(3 * id.vertex_index);
@@ -340,7 +404,7 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 
 			// TRIANGLE 1
 
-			edge1 = vertices.at(vertices.size() - 2).position - vertices.at(vertices.size() - 3).position;
+			/*edge1 = vertices.at(vertices.size() - 2).position - vertices.at(vertices.size() - 3).position;
 			edge2 = vertices.at(vertices.size() - 1).position - vertices.at(vertices.size() - 3).position;
 
 			deltaUV1 = vertices.at(vertices.size() - 2).uv; -vertices.at(vertices.size() - 3).uv;
@@ -360,6 +424,8 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 
 			vertices.at(vertices.size() - 3).tangent = tang;
 			vertices.at(vertices.size() - 3).bitangent = bitang;
+
+			std::cout << "BTG " << bitang.x << " " << bitang.y << " " << bitang.z << std::endl;*/
 #ifdef CALC_NORM			
 			vertices.at(vertices.size() - 3).normal = glm::cross(tang, bitang);
 #endif
@@ -369,7 +435,7 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 			edge1 = vertices.at(vertices.size() - 1).position - vertices.at(vertices.size() - 2).position;
 			edge2 = vertices.at(vertices.size() - 3).position - vertices.at(vertices.size() - 2).position;
 
-			deltaUV1 = vertices.at(vertices.size() - 1).uv; -vertices.at(vertices.size() - 2).uv;
+			deltaUV1 = vertices.at(vertices.size() - 1).uv; - vertices.at(vertices.size() - 2).uv;
 			deltaUV2 = vertices.at(vertices.size() - 3).uv - vertices.at(vertices.size() - 2).uv;
 
 			fx = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
@@ -379,19 +445,26 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 			tang.z = fx * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
 			tang = glm::normalize(tang);
 
-			bitang.x = fx * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+			/*bitang.x = fx * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
 			bitang.y = fx * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
 			bitang.z = fx * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
-			bitang = glm::normalize(bitang);
+			bitang = glm::normalize(bitang);*/
+			bitang = glm::normalize(glm::cross(tang, vertices.at(vertices.size() - 1).normal));
+
+			vertices.at(vertices.size() - 3).tangent = tang;
+			vertices.at(vertices.size() - 3).bitangent = bitang;
 
 			vertices.at(vertices.size() - 2).tangent = tang;
 			vertices.at(vertices.size() - 2).bitangent = bitang;
+
+			vertices.at(vertices.size() - 1).tangent = tang;
+			vertices.at(vertices.size() - 1).bitangent = bitang;
 #ifdef CALC_NORM			
 			vertices.at(vertices.size() - 2).normal = glm::cross(tang, bitang);
 #endif
 
 			// TRIANGLE 3
-
+/*
 			edge1 = vertices.at(vertices.size() - 3).position - vertices.at(vertices.size() - 1).position;
 			edge2 = vertices.at(vertices.size() - 2).position - vertices.at(vertices.size() - 1).position;
 
@@ -411,7 +484,7 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 			bitang = glm::normalize(bitang);
 
 			vertices.at(vertices.size() - 1).tangent = tang;
-			vertices.at(vertices.size() - 1).bitangent = bitang;
+			vertices.at(vertices.size() - 1).bitangent = bitang;*/
 #ifdef CALC_NORM			
 			vertices.at(vertices.size() - 1).normal = glm::cross(tang, bitang);
 #endif
@@ -434,6 +507,54 @@ bool Mesh::loadModelFromFile(std::string file, bool loadMaterials) {
 
 	//for (GLuint shape = 0; shape < (shapesIndices.size() - 1); shape++)
 	//	std::cout << shapesIndices.at(shape) << " " << shapesIndices.at(shape + 1) << std::endl;
+
+//#ifdef CALC_TB
+/*	glm::vec3 v0, v1, v2;
+	glm::vec2 uv0, uv1, uv2;
+	glm::vec3 edge1, edge2;
+	glm::vec2 deltaUV1, deltaUV2;
+	glm::vec3 tangent, bitangent;
+
+	for (int i = 0; i < vertices.size(); i += 3) {
+
+		v0 = vertices[i + 1].position;
+		v1 = vertices[i + 2].position;
+		v2 = vertices[i].position;
+
+		uv0 = vertices[i + 1].uv;
+		uv0 = vertices[i + 2].uv;
+		uv0 = vertices[i].uv;
+
+		edge1 = v1 - v0;
+		edge2 = v2 - v0;
+
+		deltaUV1 = uv1 - uv0;
+		deltaUV2 = uv2 - uv0;
+
+		std::cout << "f " << (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y) << std::endl;
+
+		float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
+
+		tangent.x = f * (deltaUV2.y * edge1.x - deltaUV1.y * edge2.x);
+		tangent.y = f * (deltaUV2.y * edge1.y - deltaUV1.y * edge2.y);
+		tangent.z = f * (deltaUV2.y * edge1.z - deltaUV1.y * edge2.z);
+		tangent = glm::normalize(tangent);
+
+		bitangent.x = f * (-deltaUV2.x * edge1.x + deltaUV1.x * edge2.x);
+		bitangent.y = f * (-deltaUV2.x * edge1.y + deltaUV1.x * edge2.y);
+		bitangent.z = f * (-deltaUV2.x * edge1.z + deltaUV1.x * edge2.z);
+		bitangent = glm::normalize(bitangent);
+		//bitangent = glm::normalize(glm::cross(tangent, vertices[i].normal));
+
+		vertices[i].tangent = tangent;
+		vertices[i + 1].tangent = tangent;
+		vertices[i + 2].tangent = tangent;
+
+		vertices[i].bitangent = bitangent;
+		vertices[i + 1].bitangent = bitangent;
+		vertices[i + 2].bitangent = bitangent;
+	}*/
+//#endif
 
 	std::chrono::high_resolution_clock::time_point endTime = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> time = std::chrono::duration_cast<std::chrono::duration<double>>(endTime - startTime);

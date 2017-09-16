@@ -157,7 +157,7 @@ int main(void) {
 	return 0;
 }*/
 
-
+/*
 #undef CALC_TB
 
 #include <iostream>
@@ -259,7 +259,7 @@ int main(void) {
 	std::vector<GLuint> ebo;
 	geom.push_back(v1);
 	geom.push_back(v2);
-	geom.push_back(v3);*/
+	geom.push_back(v3);
 
 
 	Window w(900, 900, "GLadiator", true);
@@ -272,8 +272,9 @@ int main(void) {
 	Skybox b(faces);
 	//Mesh m(geom, ebo);
 	//Mesh m("../test/dragon.obj");
+	Mesh m("../test/plane.obj", true, &ts, DN_TEX);
 	//Mesh m("../test/Lara_Croft/Lara_Croft.obj", true, &ts, DN_TEX);
-	Mesh m("../test/US Galaxy/galaxy.obj", false, nullptr, NO_TEX);
+	//Mesh m("../test/US Galaxy/galaxy.obj", false, nullptr, NO_TEX);
 	//Mesh m("../test/Aventador/Avent.obj");
 	//Mesh e("../test/hairball.obj", false, 0);
 	//Mesh m("../test/San Miguel/san-miguel-low-poly.obj");
@@ -294,7 +295,7 @@ int main(void) {
 
 	/*h.attachShader(Shader::VERTEX, "../test/test_shader.vs");
 	h.attachShader(Shader::FRAGMENT, "../test/test_shader.fs");
-	h.linkProgram();*/
+	h.linkProgram();
 
 	w.setMouseCallback(mouse_callback);
 	//w.setKeyCallback(key_callback);
@@ -327,8 +328,8 @@ int main(void) {
 		s.useProgram();
 
 		glm::mat4 model;
-		//model = glm::scale(model, glm::vec3(0.2340325f, 0.2340325f, 0.2340325f));
-		model = glm::scale(model, glm::vec3(0.0195f, 0.0195f, 0.0195f));
+		model = glm::scale(model, glm::vec3(0.2340325f, 0.2340325f, 0.2340325f));
+		//model = glm::scale(model, glm::vec3(0.0195f, 0.0195f, 0.0195f));
 		//model = glm::scale(model, glm::vec3(0.215f, 0.215f, 0.215f));
 		//model = glm::scale(model, glm::vec3(0.000195f, 0.000195f, 0.000195f));
 		//model = glm::scale(model, glm::vec3(0.0009202f, 0.0009202f, 0.0009202f));
@@ -381,7 +382,7 @@ int main(void) {
 		std::cout << x[0].x << " " << x[0].y << " " << x[0].z << std::endl;
 		std::cout << x[1].x << " " << x[1].y << " " << x[1].z << std::endl;
 		std::cout << x[2].x << " " << x[2].y << " " << x[2].z << std::endl;
-		std::cout << x[3].x << " " << x[3].y << " " << x[3].z << std::endl;*/
+		std::cout << x[3].x << " " << x[3].y << " " << x[3].z << std::endl;
 
 		w.swapBuffers();
 
@@ -397,4 +398,4 @@ int main(void) {
 	}
 
 	return 0;
-}
+}*/
